@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="or">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Telegram Mini App Game</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #1c1c1e;
+      color: #ffffff;
+      margin: 0;
+      padding: 20px;
+    }
+    .card {
+      background: #2c2c2e;
+      border-radius: 16px;
+      padding: 20px;
+      margin-top: 30px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+    h1 { font-size: 24px; color: #0088cc; }
+    p { font-size: 16px; color: #a1a1a6; }
+    .btn {
+      background-color: #0088cc;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-size: 18px;
+      font-weight: bold;
+      border-radius: 12px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    .score {
+      font-size: 32px;
+      font-weight: bold;
+      color: #34c759;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h1>🎮 Tapha Mini App</h1>
+    <p>Qabxii kee dabalachuuf button gadii cuqaasi!</p>
+    <div class="score" id="score">0</div>
+    <button class="btn" onclick="increaseScore()">Cuqaasi (+1)</button>
+  </div>
+
+  <script>
+    window.Telegram.WebApp.ready();
+    let count = 0;
+
+    function increaseScore() {
+      count++;
+      document.getElementById("score").innerText = count;
+      
+      // Humni vibrator bilbilaa akka hojjetuuf
+      if (window.Telegram.WebApp.HapticFeedback) {
+        window.Telegram.WebApp.HapticFeedback.impactOccurred('medium');
+      }
+    }
+  </script>
+
+</body>
+</html>
