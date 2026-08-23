@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="om">
 <head>
@@ -46,9 +47,14 @@
             border-radius: 10px;
             cursor: pointer;
             width: 100%;
+            margin-bottom: 12px;
         }
         .btn:active {
             transform: scale(0.98);
+        }
+        .btn-boost {
+            background-color: #f39c12;
+            color: #1a1a1a;
         }
     </style>
 </head>
@@ -64,6 +70,7 @@
         <div class="score" id="score">0</div>
 
         <button class="btn" onclick="increaseScore()">Cuqaasi (+1)</button>
+        <button class="btn btn-boost" onclick="buyBoost()">🚀 Boost Bitadhu (0.1 TON)</button>
     </div>
 
     <script>
@@ -81,6 +88,32 @@
 
             if (window.Telegram.WebApp.HapticFeedback) {
                 window.Telegram.WebApp.HapticFeedback.impactOccurred('medium');
+            }
+        }
+
+        async function buyBoost() {
+            if (!tonConnectUI.connected) {
+                alert("Jalqaba Wallet kee Connect godhi!");
+                return;
+            }
+
+            const transaction = {
+                validUntil: Math.floor(Date.now() / 1000) + 600,
+                messages: [
+                    {
+                        address: "UQC7GtIdD6cvcldhgMbTO7dejSjDMkiTbl4EE9v2ydgu_mfs",
+                        amount: "100000000" // 0.1 TON
+                    }
+                ]
+            };
+
+            try {
+                await tonConnectUI.sendTransaction(transaction);
+                alert("Kaffaltiin milkaa'eera! +100 Point argatte!");
+                count += 100;
+                document.getElementById("score").innerText = count;
+            } catch (e) {
+                alert("Kaffaltiin hin milkaa'ine ykn haqameera.");
             }
         }
     </script>
