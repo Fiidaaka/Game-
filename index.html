@@ -1,46 +1,91 @@
-
-function withdrawPoints() {
-    let minWithdraw = 100;
-    if (currentScore < minWithdraw) {
-        alert("Qabxii gahaa hin qabdu! Kaffaltii xiqqaa baafachuuf qabxii 100 ol qabaachuu qabda.");
-        return;
-    }
-
-    // Ergaa Telegram user irraa argame qindeessuu
-    const tg = window.Telegram.WebApp;
-    const user = tg.initDataUnsafe?.user;
-    const username = user ? user.username : "Unknown";
-    const userId = user ? user.id : "Unknown";
-
-    // Ergaa bot keetiif ykn server keetiif ergamu
-    let message = `📥 Gaaffiin Withdraw Haaraa!\n👤 User: @${username} (ID: ${userId})\n💰 Qabxii: ${currentScore}`;
-
-    // Bot Token fi Chat ID kee fayyadamuun Telegram botitti erguu
-    let botToken = "BOKI_BOT_TOKEN_KEETI_ASITTI_GALCHI"; 
-    let chatId = "CHAT_ID_KEETII_ASITTI_GALCHI";
-
-    if (botToken === "BOKI_BOT_TOKEN_KEETI_ASITTI_GALCHI") {
-        alert("Gaaffiin withdraw kee galmaa'eera! (Qabxii: " + currentScore + ")");
-        return;
-    }
-
-    fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            chat_id: chatId,
-            text: message
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if(data.ok) {
-            alert("Milkaa'inaan gaaffiin withdraw kee bot keetti ergamera!");
-        } else {
-            alert("Rakkoo xiqqootu mudate, irra deebi'ii yaali.");
+<!DOCTYPE html>
+<html lang="om">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fiidaaka Tapha Mini App</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #1a1a1a;
+            color: white;
+            margin: 0;
+            padding: 20px;
         }
-    })
-    .catch(error => {
-        alert("Network waliin walqabatee dogoggorri uumame.");
-    });
-}
+        .card {
+            background-color: #2b2b2b;
+            padding: 25px;
+            border-radius: 15px;
+            max-width: 350px;
+            margin: auto;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+        .score {
+            font-size: 40px;
+            color: #4caf50;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+        .btn {
+            background-color: #0088cc;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 12px;
+        }
+        .btn:active {
+            transform: scale(0.98);
+        }
+        .btn-boost {
+            background-color: #f39c12;
+            color: #fafafa;
+        }
+        .btn-withdraw {
+            background-color: #28a745;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h2>🎮 Tapha Mini App</h2>
+        <p>Qabxii kee dabalachuuf button gadii cuqaasi!</p>
+
+        <div class="score" id="score">203</div>
+
+        <button class="btn" onclick="increaseScore()">Cuqaasi (+1)</button>
+        <button class="btn btn-boost" onclick="buyBoost()">🚀 Boost Bitadhu (0.1 TON)</button>
+        <button class="btn btn-withdraw" onclick="withdrawPoints()">📥 Qabxii Baafachuu (Withdraw)</button>
+    </div>
+
+    <script>
+        window.Telegram.WebApp.ready();
+        let currentScore = 203;
+
+        function increaseScore() {
+            currentScore += 1;
+            document.getElementById('score').innerText = currentScore;
+        }
+
+        function buyBoost() {
+            alert("Boost bituuf gara Telegram Wallettti geessaa jira...");
+        }
+
+        function withdrawPoints() {
+            let minWithdraw = 100;
+            if (currentScore < minWithdraw) {
+                alert("Qabxii gahaa hin qabdu! Kaffaltii xiqqaa baafachuuf qabxii 100 ol qabaachuu qabda.");
+                return;
+            }
+            alert("Gaaffiin withdraw kee galmaa'eera! Wallet keetti ergamaa jira...");
+        }
+    </script>
+</body>
+</html>
