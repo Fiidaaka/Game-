@@ -1,10 +1,14 @@
+
 <!DOCTYPE html>
 <html lang="om">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fiidaaka Tapha Mini App</title>
+    <!-- Telegram Web App SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- TON Connect UI SDK -->
+    <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -21,6 +25,11 @@
             max-width: 350px;
             margin: auto;
             box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+        #ton-connect {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
         }
         .score {
             font-size: 40px;
@@ -55,10 +64,13 @@
 <body>
 
     <div class="card">
+        <!-- TON Connect Wallet Button -->
+        <div id="ton-connect"></div>
+
         <h2>🎮 Tapha Mini App</h2>
         <p>Qabxii kee dabalachuuf button gadii cuqaasi!</p>
 
-        <div class="score" id="score">203</div>
+        <div class="score" id="score">215</div>
 
         <button class="btn" onclick="increaseScore()">Cuqaasi (+1)</button>
         <button class="btn btn-boost" onclick="buyBoost()">🚀 Boost Bitadhu (0.1 TON)</button>
@@ -67,7 +79,14 @@
 
     <script>
         window.Telegram.WebApp.ready();
-        let currentScore = 203;
+
+        // Initialize TON Connect UI
+        const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
+            manifestUrl: 'https://fiidaaka.github.io/Game-/tonconnect-manifest.json',
+            buttonRootId: 'ton-connect'
+        });
+
+        let currentScore = 215;
 
         function increaseScore() {
             currentScore += 1;
@@ -78,13 +97,21 @@
             alert("Boost bituuf gara Telegram Wallettti geessaa jira...");
         }
 
-        function withdrawPoints() {
+        async function withdrawPoints() {
             let minWithdraw = 100;
             if (currentScore < minWithdraw) {
                 alert("Qabxii gahaa hin qabdu! Kaffaltii xiqqaa baafachuuf qabxii 100 ol qabaachuu qabda.");
                 return;
             }
-            alert("Gaaffiin withdraw kee galmaa'eera! Wallet keetti ergamaa jira...");
+
+            // Wallet connected ta'uu fi dhiisuu isaa ilaaluu
+            if (!tonConnectUI.connected) {
+                alert("Mee dura Wallet kee (Connect Wallet) buttoon gubbaa jiruun walqabsiisi!");
+                tonConnectUI.openModal();
+                return;
+            }
+
+            alert("Wallet kee walqabateera! Gaaffiin withdraw kee galmaa'eera.");
         }
     </script>
 </body>
