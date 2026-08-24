@@ -90,22 +90,15 @@
         function increaseScore() {
             currentScore += 1;
             document.getElementById('score').innerText = currentScore;
+                async function buyBoost() {
+            if (!tonConnectUI.connected) {
+                alert("Mee dura Wallet kee walqabsiisi (Connect Wallet)!");
+                tonConnectUI.openModal();
+                return;
+            }
+            alert("Wallet kee walqabateera! Amma Boost bituu dandeessa.");
         }
 
-        async function buyBoost() {
-    // 1. Dursee Wallet connected ta'uu isaa ilaala
-    if (!tonConnectUI.connected) {
-        alert("Mee dura Wallet kee walqabsiisi (Connect Wallet)!");
-        // Wallet akka walqabsiisuu danda'uuf Modal bana
-        tonConnectUI.openModal();
-        return;
-    }
-
-    // 2. Yoo Wallet kee walqabateera ta'e hojiin Boost itti fufa
-    alert("Wallet kee walqabateera! Amma Boost bituu dandeessa.");
-    
-    // As irratti kaffaltiin (Transaction) TON akka raawwatamu logic dabaluu dandeessa
-}
 
 
         async function withdrawPoints() {
