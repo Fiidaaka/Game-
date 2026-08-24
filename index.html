@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="om">
 <head>
@@ -93,9 +92,21 @@
             document.getElementById('score').innerText = currentScore;
         }
 
-        function buyBoost() {
-            alert("Boost bituuf gara Telegram Wallettti geessaa jira...");
-        }
+        async function buyBoost() {
+    // 1. Dursee Wallet connected ta'uu isaa ilaala
+    if (!tonConnectUI.connected) {
+        alert("Mee dura Wallet kee walqabsiisi (Connect Wallet)!");
+        // Wallet akka walqabsiisuu danda'uuf Modal bana
+        tonConnectUI.openModal();
+        return;
+    }
+
+    // 2. Yoo Wallet kee walqabateera ta'e hojiin Boost itti fufa
+    alert("Wallet kee walqabateera! Amma Boost bituu dandeessa.");
+    
+    // As irratti kaffaltiin (Transaction) TON akka raawwatamu logic dabaluu dandeessa
+}
+
 
         async function withdrawPoints() {
             let minWithdraw = 100;
@@ -116,3 +127,4 @@
     </script>
 </body>
 </html>
+
