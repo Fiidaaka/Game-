@@ -1,4 +1,5 @@
 
+    
 <!DOCTYPE html>
 <html lang="om">
 <head>
@@ -7,13 +8,11 @@
     <title>Fiidaaka Tapha Mini App</title>
     <!-- Telegram Web App SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <!-- TON Connect SDK -->
-    <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            background-color: #1e1e1e;
+            background-color: #1efefe;
             color: white;
             margin: 0;
             padding: 20px;
@@ -54,7 +53,10 @@
         }
         .btn-boost {
             background-color: #f39c12;
-            color: #1a1a1a;
+            color: #fafafa;
+        }
+        .btn-withdraw {
+            background-color: #28a745;
         }
     </style>
 </head>
@@ -67,57 +69,35 @@
         <h2>🎮 Tapha Mini App</h2>
         <p>Qabxii kee dabalachuuf button gadii cuqaasi!</p>
 
-        <div class="score" id="score">0</div>
+        <div class="score" id="score">203</div>
 
         <button class="btn" onclick="increaseScore()">Cuqaasi (+1)</button>
         <button class="btn btn-boost" onclick="buyBoost()">🚀 Boost Bitadhu (0.1 TON)</button>
+        <button class="btn btn-withdraw" onclick="withdrawPoints()">📥 Qabxii Baafachuu (Withdraw)</button>
     </div>
 
     <script>
         window.Telegram.WebApp.ready();
 
-        const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
-            manifestUrl: 'https://fiidaaka.github.io/Game-/tonconnect-manifest.json',
-            buttonRootId: 'ton-connect'
-        });
+        let currentScore = 203;
 
-        let count = 0;
         function increaseScore() {
-            count++;
-            document.getElementById("score").innerText = count;
-
-            if (window.Telegram.WebApp.HapticFeedback) {
-                window.Telegram.WebApp.HapticFeedback.impactOccurred('medium');
-            }
+            currentScore += 1;
+            document.getElementById('score').innerText = currentScore;
         }
 
-        async function buyBoost() {
-            if (!tonConnectUI.connected) {
-                alert("Jalqaba Wallet kee Connect godhi!");
+        function buyBoost() {
+            alert("Boost bituuf gara Telegram Wallettti geessaa jira...");
+        }
+
+        function withdrawPoints() {
+            let minWithdraw = 100;
+            if (currentScore < minWithdraw) {
+                alert("Qabxii gahaa hin qabdu! Kaffaltii xiqqaa baafachuuf qabxii 100 ol qabaachuu qabda.");
                 return;
             }
-
-            const transaction = {
-                validUntil: Math.floor(Date.now() / 1000) + 600,
-                messages: [
-                    {
-                        address: "UQC7GtIdD6cvcldhgMbTO7dejSjDMkiTbl4EE9v2ydgu_mfs",
-                        amount: "100000000" // 0.1 TON
-                    }
-                ]
-            };
-
-            try {
-                await tonConnectUI.sendTransaction(transaction);
-                alert("Kaffaltiin milkaa'eera! +100 Point argatte!");
-                count += 100;
-                document.getElementById("score").innerText = count;
-            } catch (e) {
-                alert("Kaffaltiin hin milkaa'ine ykn haqameera.");
-            }
+            alert("Gaaffiin withdraw kee galmaa'eera! Wallet keetti ergamaa jira...");
         }
     </script>
 </body>
 </html>
-
-    
