@@ -1,128 +1,96 @@
-
 <!DOCTYPE html>
-<html lang="om">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fiidaaka Tapha Mini App</title>
-    <!-- Telegram Web App fi TON Connect Script -->
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
     <style>
-        body {
-            background-color: #1c1c1e;
-            color: white;
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 20px;
-            margin: 0;
+        body { 
+            font-family: Arial, sans-serif; 
+            text-align: center; 
+            padding: 40px; 
+            background: #0f172a; 
+            color: #fff; 
         }
-        .card {
-            background-color: #2c2c2e;
-            border-radius: 15px;
-            padding: 20px;
-            margin-top: 20px;
+        h1 {
+            color: #38bdf8;
+            margin-bottom: 10px;
         }
-        h1 { font-size: 48px; color: #34c759; margin: 10px 0; }
-        button {
-            width: 100%;
-            padding: 15px;
-            margin: 10px 0;
-            border: none;
-            border-radius: 10px;
-            font-size: 18px;
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: #1e293b;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        button { 
+            background: #2563eb; 
+            color: white; 
+            border: none; 
+            padding: 12px 24px; 
+            font-size: 16px; 
+            border-radius: 8px; 
+            cursor: pointer; 
             font-weight: bold;
-            cursor: pointer;
+            margin-top: 15px;
+            width: 100%;
         }
-        #btnClick { background-color: #007aff; color: white; }
-        #btnBoost { background-color: #ff9500; color: white; }
-        #btnWithdraw { background-color: #34c759; color: white; }
-        #ton-connect { display: flex; justify-content: center; margin-bottom: 20px; }
+        button:hover { background: #1d4ed8; }
+        #walletInfo { 
+            margin-top: 20px; 
+            word-break: break-all; 
+            color: #38bdf8; 
+            font-size: 14px;
+            background: #0f172a;
+            padding: 10px;
+            border-radius: 6px;
+        }
     </style>
 </head>
 <body>
 
-    <!-- Bakka Button Wallet itti mul'atu -->
-    <div id="ton-connect"></div> 
-
-    <div class="card">
-        <h2>🎮 Fiidaaka Tapha Mini App</h2>
-        <p>Qabxii kee dabalachuuf button gadii cuqaasi!</p>
-        <!-- Qabxii mul'isuuf -->
-        <h1 id="scoreDisplay">0</h1>
-
-        <button id="btnClick">Cuqaasi (+1)</button>
-        <button id="btnBoost">🚀 Boost Bitadhu (0.1 TON)</button>
-        <button id="btnWithdraw">📥 Qabxii Baafachuu (Withdraw)</button>
+    <div class="container">
+        <h1>Fiidaaka Tapha Mini App</h1>
+        <p>Baga nagaan dhufte! TronLink wallet kee wajjin walqabsiisi.</p>
+        
+        <!-- Connect Button -->
+        <button id="connectBtn">Connect TronLink</button>
+        
+        <!-- Wallet Info Display -->
+        <div id="walletInfo">Wallet hin qabamne</div>
     </div>
 
     <script>
-        // 1. Telegram Web App jalqabsiisuu
-        const tg = window.Telegram.WebApp;
-        tg.expand();
+        const connectBtn = document.getElementById('connectBtn');
+        const walletInfo = document.getElementById('walletInfo');
 
-        // 2. TON Connect UI jalqabsiisuu
-        const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
-            manifestUrl: 'https://fiidaaka.github.io/tonconnect-manifest.json', 
-            buttonRootId: 'ton-connect'
-        });
-
-        // 3. Qabxii (Score) to'achuu - LocalStorage fayyadamnee akka hin badne goona
-        let score = localStorage.getItem("fiidaaka_score") ? parseInt(localStorage.getItem("fiidaaka_score")) : 215;
-        const scoreDisplay = document.getElementById("scoreDisplay");
-        scoreDisplay.innerText = score;
-
-        function saveScore() {
-            localStorage.setItem("fiidaaka_score", score);
-            scoreDisplay.innerText = score;
-        }
-
-        // --- Hojii Button Cuqaasi (+1) ---
-        document.getElementById("btnClick").addEventListener("click", () => {
-            score += 1;
-            saveScore();
-            if (tg.HapticFeedback) {
-                tg.HapticFeedback.impactOccurred('light');
-            }
-        });
-
-        // --- Hojii Button Withdraw (Qabxii Baafachuu) ---
-        document.getElementById("btnWithdraw").addEventListener("click", () => {
-            const minWithdraw = 1000; // Daangaa xiqqaa (Minimum withdraw) 1000
-            
-            if (score < minWithdraw) {
-                tg.showAlert(`Qabxiin kee guutuu miti! Baafachuuf yoo xiqqaate qabxii ${minWithdraw} qabaachuu qabda. Amma ${score} qabda.`);
-            } else {
-                tg.showAlert("Gaaffiin baafachuu (Withdraw) kee fudhatameera! Ogeeyyiin keenya ilaaluun gara Wallet keetiitti siif ergu.");
-            }
-        });
-
-        // --- Hojii Button Boost Bitachuu (Transaction) ---
-        document.getElementById("btnBoost").addEventListener("click", async () => {
-            if (!tonConnectUI.connected) {
-                tg.showAlert("Maaloo jalqaba Wallet kee (fkn: MyTonWallet ykn Tonkeeper) walqabsiisi!");
-                return;
-            }
-
-            const transaction = {
-                validUntil: Math.floor(Date.now() / 1000) + 60,
-                messages: [
-                    {
-                        address: "UQ_ADDRESS_KEE_ASITTI_GALCHI", 
-                        amount: "100000000" // 0.1 TON
-                    }
-                ]
-            };
-
+        connectBtn.addEventListener('click', async () => {
             try {
-                tg.showAlert("Wallet kee irratti Mirkaneessi (Approve godhi)...");
-                await tonConnectUI.sendTransaction(transaction);
-                tg.showAlert("Boost milkiin bitameera! Qabxii dabalataa argatteetta.");
-                score += 500; 
-                saveScore();
+                // TronLink mobile app ykn browser extension keessa jiraachuu isaa ilaaluu
+                if (window.tronWeb && window.tronWeb.defaultAddress.base58) {
+                    const userAddress = window.tronWeb.defaultAddress.base58;
+                    walletInfo.innerHTML = `Connected Wallet:<br><b>${userAddress}</b>`;
+                    connectBtn.innerText = "Connected";
+                    connectBtn.style.background = "#16a34a"; // Green color on success
+                } else {
+                    if (window.tronLink) {
+                        const res = await window.tronLink.request({ method: 'tron_requestAccounts' });
+                        if (res.code === 200) {
+                            const userAddress = window.tronWeb.defaultAddress.base58;
+                            walletInfo.innerHTML = `Connected Wallet:<br><b>${userAddress}</b>`;
+                            connectBtn.innerText = "Connected";
+                            connectBtn.style.background = "#16a34a";
+                        } else {
+                            walletInfo.innerText = "Wallet wajjin walqabachuun danda'amuu dhiise. Mee irra deebi'aa yaalaa.";
+                        }
+                    } else {
+                        walletInfo.innerText = "Mee dura TronLink app banuu ykn install gochuu keessan mirkaneessaa!";
+                    }
+                }
             } catch (error) {
-                console.error("Kufaatii:", error);
-                tg.showAlert("Bittaa ykn Transaction sun haqameera ykn kufeera.");
+                console.error("Connection error:", error);
+                walletInfo.innerText = "Rakkoon uumameera: " + error.message;
             }
         });
     </script>
