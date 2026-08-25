@@ -68,7 +68,7 @@
         <!-- TronLink Connect Button -->
         <button class="btn" id="connectBtn" onclick="connectWallet()">Connect TronLink</button>
         
-        <!-- Adsgram Reward Button -->
+        <!-- Adsgram Reward Button (Galii Argachuuf) -->
         <button class="btn btn-ad" onclick="showAd()">Beeksisa Ilaali (Earn Reward)</button>
     </div>
 
@@ -79,13 +79,14 @@
                 const address = window.tronWeb.defaultAddress.base58;
                 document.getElementById('status-text').innerText = "Connected: " + address.substring(0, 6) + "..." + address.substring(address.length - 4);
                 document.getElementById('connectBtn').innerText = "Connected";
+                document.getElementById('connectBtn').style.backgroundColor = "#2a9d8f";
             } else {
                 alert("TronLink wallet hin argamne! Mee appii keessaa bani.");
             }
         }
 
         // --- ADSGRAM LOGIC ---
-        // Kana keessatti "YOUR_BLOCK_ID_HERE" kan jedhu dhiiseefii Block ID kee sirrii galchita
+        // Bakka "YOUR_BLOCK_ID_HERE" jedhuutti Block ID kee sirrii galchita
         const adBlockId = "YOUR_BLOCK_ID_HERE"; 
 
         function showAd() {
@@ -93,7 +94,7 @@
                 window.Adsgram.init({ blockId: adBlockId }).show()
                     .then((result) => {
                         console.log("Ad watched successfully", result);
-                        alert("Galatoomi! Beeksisa ilaaluun keetiif badhaasin kee siif darbeera.");
+                        alert("Galatoomi! Beeksisa ilaaluun keetiif galii/badhaasin kee siif darbeera.");
                     })
                     .catch((err) => {
                         console.error("Ad error", err);
@@ -106,4 +107,3 @@
     </script>
 </body>
 </html>
-
