@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -54,10 +55,10 @@
         <h1>Fiidaaka Tapha Mini App</h1>
         <p>Baga nagaan dhufte! TronLink wallet kee wajjin walqabsiisi.</p>
         
-        <!-- Connect Button -->
+        <!-- Connect Button (Comment keessaa baheera) -->
         <button id="connectBtn">Connect TronLink</button>
         
-        <!-- Wallet Info Display -->
+        <!-- Wallet Info Display (Comment keessaa baheera) -->
         <div id="walletInfo">Wallet hin qabamne</div>
     </div>
 
@@ -67,12 +68,11 @@
 
         connectBtn.addEventListener('click', async () => {
             try {
-                // TronLink mobile app ykn browser extension keessa jiraachuu isaa ilaaluu
                 if (window.tronWeb && window.tronWeb.defaultAddress.base58) {
                     const userAddress = window.tronWeb.defaultAddress.base58;
                     walletInfo.innerHTML = `Connected Wallet:<br><b>${userAddress}</b>`;
                     connectBtn.innerText = "Connected";
-                    connectBtn.style.background = "#16a34a"; // Green color on success
+                    connectBtn.style.background = "#16a34a";
                 } else {
                     if (window.tronLink) {
                         const res = await window.tronLink.request({ method: 'tron_requestAccounts' });
