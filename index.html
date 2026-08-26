@@ -1,107 +1,86 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fiidaaka Tapha Mini App</title>
+    <!-- Adsgram SDK Script -->
+    <script src="https://sad.adsgram.ai/js/adsgram.js"></script>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #0d1b2a;
+            background-color: #0f172a;
             color: #ffffff;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
             display: flex;
             flex-direction: column;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             height: 100vh;
-            margin: 0;
-        }
-        .card {
-            background-color: #1b263b;
-            padding: 30px;
-            border-radius: 12px;
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            width: 90%;
-            max-width: 400px;
         }
         h1 {
-            color: #4ea8de;
+            color: #38bdf8;
             font-size: 24px;
+            margin-bottom: 10px;
         }
         p {
-            color: #e0e1dd;
+            color: #94a3b8;
             font-size: 14px;
             margin-bottom: 20px;
         }
-        .btn {
-            background-color: #3a86ff;
+        .tap-btn {
+            background: linear-gradient(135deg, #38bdf8, #0284c7);
             color: white;
             border: none;
-            padding: 12px 20px;
-            font-size: 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 10px;
+            padding: 15px 30px;
+            font-size: 20px;
             font-weight: bold;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(56, 189, 248, 0.4);
+            transition: transform 0.1s ease;
         }
-        .btn:hover {
-            background-color: #2667cc;
+        .tap-btn:active {
+            transform: scale(0.95);
         }
-        .btn-ad {
-            background-color: #ff006e;
-        }
-        .btn-ad:hover {
-            background-color: #d9045b;
+        .score {
+            font-size: 28px;
+            margin-top: 20px;
+            color: #4ade80;
         }
     </style>
-    <!-- Adsgram SDK Script -->
-    <script src="https://sad.adsgram.ai/js/sad.js"></script>
 </head>
 <body>
 
-    <div class="card">
-        <h1>Fiidaaka Tapha Mini App</h1>
-        <p id="status-text">Baga nagaan dhufthe! TronLink wallet kee wajjin walqabsiisi.</p>
-        
-        <!-- TronLink Connect Button -->
-        <button class="btn" id="connectBtn" onclick="connectWallet()">Connect TronLink</button>
-        
-        <!-- Adsgram Reward Button (Galii Argachuuf) -->
-        <button class="btn btn-ad" onclick="showAd()">Beeksisa Ilaali (Earn Reward)</button>
-    </div>
+    <h1>Fiidaaka Tapha Mini App</h1>
+    <p>Qabxii dabachuuf beeksisa ilaali!</p>
+
+    <div class="score">Qabxii: <span id="scoreVal">0</span></div>
+    <br>
+    <button class="tap-btn" onclick="showRewardedAd()">Beeksisa Ilaali & Badhaasa Fudh</button>
 
     <script>
-        // --- TRONLINK WALLET LOGIC ---
-        async function connectWallet() {
-            if (window.tronWeb && window.tronWeb.defaultAddress.base58) {
-                const address = window.tronWeb.defaultAddress.base58;
-                document.getElementById('status-text').innerText = "Connected: " + address.substring(0, 6) + "..." + address.substring(address.length - 4);
-                document.getElementById('connectBtn').innerText = "Connected";
-                document.getElementById('connectBtn').style.backgroundColor = "#2a9d8f";
-            } else {
-                alert("TronLink wallet hin argamne! Mee appii keessaa bani.");
-            }
-        }
+        // Adsgram Rewarded Controller initialization with UnitID: 44598
+        const adController = window.Adsgram ? window.Adsgram.init({ blockId: "44598" }) : null;
 
-        // --- ADSGRAM LOGIC ---
-        // Bakka "YOUR_BLOCK_ID_HERE" jedhuutti Block ID kee sirrii galchita
-        const adBlockId = "YOUR_BLOCK_ID_HERE"; 
+        let score = 0;
 
-        function showAd() {
-            if (window.Adsgram) {
-                window.Adsgram.init({ blockId: adBlockId }).show()
-                    .then((result) => {
-                        console.log("Ad watched successfully", result);
-                        alert("Galatoomi! Beeksisa ilaaluun keetiif galii/badhaasin kee siif darbeera.");
-                    })
-                    .catch((err) => {
-                        console.error("Ad error", err);
-                        alert("Beeksisichi hin xumuramne ykn rakkoon uumame.");
-                    });
+        function showRewardedAd() {
+            if (adController) {
+                adController.show().then((result) => {
+                    // Yeroo beeksisa xumure (rewarded success)
+                    score += 10;
+                    document.getElementById('scoreVal').innerText = score;
+                    alert("Galatoomi! Badhaasni kee dabaleera.");
+                }).catch((result) => {
+                    // Yeroo beeksisa kuffise ykn cufame
+                    alert("Beeksisi hin xumuramne: " + (result.description || "Gama biraatiin yaali"));
+                });
             } else {
-                alert("Adsgram ammatti hin fe'amne, mee irra deebi'aa yaalaa.");
+                alert("Adsgram SDK hin fe'amne!");
             }
         }
     </script>
