@@ -1,10 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fiidaaka Tapha Mini App</title>
-    <!-- Adsgram SDK Script -->
     <script src="https://sad.adsgram.ai/js/adsgram.js"></script>
     <style>
         body {
@@ -40,10 +40,6 @@
             border-radius: 12px;
             cursor: pointer;
             box-shadow: 0 4px 14px rgba(56, 189, 248, 0.4);
-            transition: transform 0.1s ease;
-        }
-        .tap-btn:active {
-            transform: scale(0.95);
         }
         .score {
             font-size: 28px;
@@ -62,9 +58,7 @@
     <button class="tap-btn" onclick="showRewardedAd()">Beeksisa Ilaali & Badhaasa Fudh</button>
 
     <script>
-        // Adsgram Rewarded Controller initialization with UnitID: 44598
         const adController = window.Adsgram ? window.Adsgram.init({ blockId: "44598" }) : null;
-
         let score = 0;
 
         function showRewardedAd() {
@@ -83,4 +77,3 @@
     </script>
 </body>
 </html>
-
