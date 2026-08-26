@@ -18,172 +18,6 @@
             justify-content: space-between;
             height: 100vh;
             margin: 0;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-        .header {
-            text-align: center;
-            margin-top: 10px;
-        }
-        .header h1 {
-            font-size: 22px;
-            margin: 0;
-            color: #38bdf8;
-        }
-        .score-card {
-            background: rgba(30, 41, 59, 0.7);
-            border: 1px solid #334155;
-            padding: 15px 30px;
-            border-radius: 16px;
-            font-size: 28px;
-            font-weight: bold;
-            color: #fbbf24;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
-            margin: 20px 0;
-        }
-        .tap-circle {
-            background: linear-gradient(145deg, #10b981, #059669);
-            color: white;
-            border: none;
-            width: 150px;
-            height: 150px;
-            font-size: 22px;
-            font-weight: bold;
-            border-radius: 50%;
-            cursor: pointer;
-            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.4);
-            transition: transform 0.1s, box-shadow 0.1s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 10px auto;
-        }
-        .tap-circle:active {
-            transform: scale(0.93);
-            box-shadow: 0 5px 10px rgba(16, 185, 129, 0.3);
-        }
-        .menu-container {
-            width: 100%;
-            max-width: 320px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        .btn {
-            background-color: #0ea5e9;
-            color: white;
-            border: none;
-            padding: 14px;
-            font-size: 15px;
-            font-weight: bold;
-            border-radius: 12px;
-            cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-            transition: background-color 0.2s;
-        }
-        .btn:hover {
-            background-color: #0284c7;
-        }
-        .btn-ad { background-color: #8b5cf6; }
-        .btn-withdraw { background-color: #f59e0b; }
-        #status-text {
-            font-size: 13px;
-            color: #94a3b8;
-            height: 20px;
-        }
-    </style>
-</head>
-<body>
-
-    <div class="header">
-        <h1>Fiidaaka Tapha Mini App</h1>
-        <p id="status-text">Qophaa'aa Jira...</p>
-    </div>
-
-    <div class="container" style="text-align: center;">
-        <div class="score-card">⭐ <span id="score">0</span></div>
-        <button class="tap-circle" onclick="tapScore()">TAPHI!</button>
-    </div>
-
-    <div class="menu-container">
-        <button class="btn btn-ad" onclick="showAd()">Beeksisa Ilaali (+50)</button>
-        <button class="btn btn-withdraw" onclick="withdrawPoints()">Withdraw (Baasuuf)</button>
-    </div>
-
-    <script>
-        // Telegram WebApp initialization
-        let tg = window.Telegram.WebApp;
-        tg.expand();
-
-        let score = 0;
-        let adController = null;
-
-        function tapScore() {
-            score += 1;
-            document.getElementById("score").innerText = score;
-            if (tg.HapticFeedback) {
-                tg.HapticFeedback.impactOccurred('light');
-            }
-        }
-
-        try {
-            if (window.Adsgram) {
-                adController = window.Adsgram.init({ blockId: "44598" });
-                document.getElementById("status-text").innerText = "Taphachuuf qophoofteetta!";
-            }
-        } catch (e) {
-            console.log("Error:", e);
-        }
-
-        async function showAd() {
-            if (!adController) {
-                alert("Adsgram ammallee hin fe'amne!");
-                return;
-            }
-
-            try {
-                document.getElementById("status-text").innerText = "Beeksisi dhihaachaa jira...";
-                const result = await adController.show();
-                score += 50;
-                document.getElementById("score").innerText = score;
-                document.getElementById("status-text").innerText = "Galatoomi! Qabxii +50 argatteetta.";
-            } catch (err) {
-                console.log("Ad error:", err);
-                document.getElementById("status-text").innerText = "Beeksisi cufameera ykn hin argamne.";
-            }
-        }
-
-        function withdrawPoints() {
-            if (score < 1000) {
-                alert("Withdraw gochuuf qabxii 1,000 qabaachuu qabda! Qabxii kee: " + score);
-            } else {
-                alert("Gaaffiin withdraw keetii galateeffameera!");
-            }
-        }
-    </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="om">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fiidaaka Tapha Mini App</title>
-    <!-- Telegram Web App SDK & Adsgram SDK -->
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
-    <style>
-        body {
-            background: linear-gradient(135deg, #0f172a, #1e293b);
-            color: #ffffff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
-            height: 100vh;
-            margin: 0;
             padding: 15px;
             box-sizing: border-box;
         }
@@ -266,7 +100,7 @@
     </div>
 
     <div class="container" style="text-align: center;">
-        <div class="score-card">⭐ <span id="score">457</span></div>
+        <div class="score-card">⭐ <span id="score">0</span></div>
         <button class="tap-circle" onclick="tapScore()">TAPHI!</button>
     </div>
 
@@ -280,12 +114,20 @@
         let tg = window.Telegram.WebApp;
         tg.expand();
 
-        let score = 457; // Qabxii kee amma jiru irraa akka itti fufu
+        // Qabxii localStorage irraa dubbisuu (Akka bakka lamatti hin qoodamneef)
+        let score = parseInt(localStorage.getItem('fiidaaka_score')) || 0;
+        document.getElementById("score").innerText = score;
+
+        function updateScore(amount) {
+            score += amount;
+            document.getElementById("score").innerText = score;
+            localStorage.setItem('fiidaaka_score', score); // Qabxii qusachuu
+        }
+
         let adController = null;
 
         function tapScore() {
-            score += 1;
-            document.getElementById("score").innerText = score;
+            updateScore(1);
             if (tg.HapticFeedback) {
                 tg.HapticFeedback.impactOccurred('light');
             }
@@ -309,8 +151,7 @@
             try {
                 document.getElementById("status-text").innerText = "Beeksisi dhihaachaa jira...";
                 const result = await adController.show();
-                score += 50;
-                document.getElementById("score").innerText = score;
+                updateScore(50);
                 document.getElementById("status-text").innerText = "Galatoomi! Qabxii +50 argatteetta.";
             } catch (err) {
                 console.log("Ad error:", err);
@@ -318,16 +159,13 @@
             }
         }
 
-        // Nama Afeeruu (Referral Link)
         function shareRef() {
             const botUrl = "https://t.me/FiidaakaGame_bot"; 
             const text = "Fiidaaka Tapha Mini App kanaan qabxii walitti qabadhu! Mee as tuqii seeni:";
             const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(botUrl)}&text=${encodeURIComponent(text)}`;
             
             window.open(shareUrl, '_blank');
-            
-            score += 100;
-            document.getElementById("score").innerText = score;
+            updateScore(100);
             alert("Linkin afeerraa qoodameera! Qabxii +100 argatteetta.");
         }
 
