@@ -4,117 +4,129 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fiidaaka Tapha Mini App</title>
-    <!-- Adsgram SDK -->
+    <!-- Telegram Web App SDK & Adsgram SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
     <style>
         body {
-            background-color: #0f172a;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
             color: #ffffff;
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
-            min-height: 100vh;
+            justify-content: space-between;
+            height: 100vh;
             margin: 0;
             padding: 20px;
             box-sizing: border-box;
         }
-        .container {
+        .header {
             text-align: center;
-            width: 100%;
-            max-width: 350px;
+            margin-top: 10px;
         }
-        .score-box {
-            font-size: 26px;
-            font-weight: bold;
-            margin: 15px 0;
+        .header h1 {
+            font-size: 22px;
+            margin: 0;
             color: #38bdf8;
-            background: #1e293b;
-            padding: 15px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
         }
-        .tap-btn {
-            background-color: #10b981;
+        .score-card {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid #334155;
+            padding: 15px 30px;
+            border-radius: 16px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #fbbf24;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+            margin: 20px 0;
+        }
+        .tap-circle {
+            background: linear-gradient(145deg, #10b981, #059669);
             color: white;
             border: none;
-            width: 130px;
-            height: 130px;
-            font-size: 18px;
+            width: 150px;
+            height: 150px;
+            font-size: 22px;
             font-weight: bold;
             border-radius: 50%;
             cursor: pointer;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
-            margin: 15px 0;
-            transition: transform 0.1s;
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.4);
+            transition: transform 0.1s, box-shadow 0.1s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px auto;
         }
-        .tap-btn:active {
-            transform: scale(0.92);
+        .tap-circle:active {
+            transform: scale(0.93);
+            box-shadow: 0 5px 10px rgba(16, 185, 129, 0.3);
         }
-        .action-btn {
+        .menu-container {
+            width: 100%;
+            max-width: 320px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .btn {
             background-color: #0ea5e9;
             color: white;
             border: none;
-            padding: 12px 15px;
-            font-size: 14px;
+            padding: 14px;
+            font-size: 15px;
             font-weight: bold;
-            border-radius: 10px;
+            border-radius: 12px;
             cursor: pointer;
-            width: 100%;
-            margin: 8px 0;
-            box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.2s;
         }
-        .withdraw-btn {
-            background-color: #f59e0b;
+        .btn:hover {
+            background-color: #0284c7;
         }
-        .ref-btn {
-            background-color: #8b5cf6;
-        }
-        .action-btn:active {
-            transform: scale(0.98);
-        }
+        .btn-ad { background-color: #8b5cf6; }
+        .btn-withdraw { background-color: #f59e0b; }
         #status-text {
-            margin-top: 15px;
             font-size: 13px;
             color: #94a3b8;
+            height: 20px;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h2>Fiidaaka Tapha Mini App</h2>
-        
-        <!-- 1. BAKKA QABXII (POINT) ITTI ILAALAN -->
-        <div class="score-box">Qabxii: <span id="score">0</span></div>
-        
-        <!-- 2. BAKKA ITTI TAPHATAN (TAP TO EARN) -->
-        <button class="tap-btn" onclick="tapScore()">TAPHI! (+1)</button>
-        
-        <!-- 3. BEEKSISA ILAALEE QABXII ITTI GUUTAN -->
-        <button class="action-btn" onclick="showAd()">Beeksisa Ilaali (+50)</button>
-        
-        <!-- 4. NAMA AFEERUU (REFERRAL) -->
-        <button class="action-btn ref-btn" onclick="shareRef()">Nama Afeeri (+100)</button>
-
-        <!-- 5. WITHDRAW GOCHUU -->
-        <button class="action-btn withdraw-btn" onclick="withdrawPoints()">Withdraw (Baasuuf)</button>
-        
+    <div class="header">
+        <h1>Fiidaaka Tapha Mini App</h1>
         <p id="status-text">Qophaa'aa Jira...</p>
     </div>
 
+    <div class="container" style="text-align: center;">
+        <div class="score-card">⭐ <span id="score">0</span></div>
+        <button class="tap-circle" onclick="tapScore()">TAPHI!</button>
+    </div>
+
+    <div class="menu-container">
+        <button class="btn btn-ad" onclick="showAd()">Beeksisa Ilaali (+50)</button>
+        <button class="btn btn-withdraw" onclick="withdrawPoints()">Withdraw (Baasuuf)</button>
+    </div>
+
     <script>
+        // Telegram WebApp initialization
+        let tg = window.Telegram.WebApp;
+        tg.expand();
+
         let score = 0;
         let adController = null;
 
-        // Taphachuun Qabxii Dabaluu
         function tapScore() {
             score += 1;
             document.getElementById("score").innerText = score;
+            if (tg.HapticFeedback) {
+                tg.HapticFeedback.impactOccurred('light');
+            }
         }
 
-        // Adsgram Qindeessuu
         try {
             if (window.Adsgram) {
                 adController = window.Adsgram.init({ blockId: "44598" });
@@ -124,7 +136,6 @@
             console.log("Error:", e);
         }
 
-        // Beeksisa Ilaaluun Qabxii Argachuu
         async function showAd() {
             if (!adController) {
                 alert("Adsgram ammallee hin fe'amne!");
@@ -134,37 +145,20 @@
             try {
                 document.getElementById("status-text").innerText = "Beeksisi dhihaachaa jira...";
                 const result = await adController.show();
-                
                 score += 50;
                 document.getElementById("score").innerText = score;
-                document.getElementById("status-text").innerText = "Galatoomi! Beeksisa ilaaluun +50 argatteetta.";
+                document.getElementById("status-text").innerText = "Galatoomi! Qabxii +50 argatteetta.";
             } catch (err) {
                 console.log("Ad error:", err);
                 document.getElementById("status-text").innerText = "Beeksisi cufameera ykn hin argamne.";
             }
         }
 
-        // Nama Afeeruu (Referral Link)
-        function shareRef() {
-            const botUrl = "https://t.me/FiidaakaGame_bot"; // Bot kee asitti jijjiiruu dandeessa
-            const text = "Fiidaaka Tapha Mini App kanaan qabxii walitti qabadhu! Mee as tuqii seeni:";
-            const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(botUrl)}&text=${encodeURIComponent(text)}`;
-            
-            // Telegram Share API ykn Link banuu
-            window.open(shareUrl, '_blank');
-            
-            // Fakkeenyaaf nama yeroo afeeru qabxii dabaluuf
-            score += 100;
-            document.getElementById("score").innerText = score;
-            alert("Linkin afeerraa qoodameera! Qabxii +100 argatteetta.");
-        }
-
-        // Withdraw Gochuu (Maallaqa/Qabxii Baasuuf)
         function withdrawPoints() {
             if (score < 1000) {
-                alert("Withdraw gochuuf qabxii 1,000 qabaachuu qabda! Qabxii kee amma jiru: " + score);
+                alert("Withdraw gochuuf qabxii 1,000 qabaachuu qabda! Qabxii kee: " + score);
             } else {
-                alert("Gaaffiin withdraw keetii galateeffameera! Akkaataa kaffaltii TON/Crypto dhiyeenyatti siif qopheeffama.");
+                alert("Gaaffiin withdraw keetii galateeffameera!");
             }
         }
     </script>
