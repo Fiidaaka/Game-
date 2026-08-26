@@ -1,10 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fiidaaka Tapha Mini App</title>
+    <!-- Adsgram SDK Script -->
     <script src="https://sad.adsgram.ai/js/adsgram.js"></script>
     <style>
         body {
@@ -41,6 +41,9 @@
             cursor: pointer;
             box-shadow: 0 4px 14px rgba(56, 189, 248, 0.4);
         }
+        .tap-btn:active {
+            transform: scale(0.95);
+        }
         .score {
             font-size: 28px;
             margin-top: 20px;
@@ -58,20 +61,21 @@
     <button class="tap-btn" onclick="showRewardedAd()">Beeksisa Ilaali & Badhaasa Fudh</button>
 
     <script>
-        const adController = window.Adsgram ? window.Adsgram.init({ blockId: "44598" }) : null;
         let score = 0;
 
         function showRewardedAd() {
-            if (adController) {
+            if (typeof window.Adsgram !== 'undefined') {
+                const adController = window.Adsgram.init({ blockId: "44598" });
+                
                 adController.show().then((result) => {
                     score += 10;
                     document.getElementById('scoreVal').innerText = score;
                     alert("Galatoomi! Badhaasni kee dabaleera.");
                 }).catch((result) => {
-                    alert("Beeksisi hin xumuramne: " + (result.description || "Gama biraatiin yaali"));
+                    alert("Beeksisi hin xumuramne ykn cufame.");
                 });
             } else {
-                alert("Adsgram SDK hin fe'amne!");
+                alert("Adsgram SDK ammallee hin fe'amne. Intarneetii kee mirkaneeffadhu!");
             }
         }
     </script>
