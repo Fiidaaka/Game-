@@ -1,11 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="om">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fiidaaka Tapha Mini App</title>
-    <!-- 1. Adsgram SDK HTML keessatti fe'uuf -->
+    <!-- Adsgram SDK -->
     <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
     <style>
         body {
@@ -15,30 +14,70 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            height: 100vh;
+            justify-content: flex-start;
+            min-height: 100vh;
             margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
         }
         .container {
             text-align: center;
-            padding: 20px;
+            width: 100%;
+            max-width: 350px;
         }
-        .btn {
+        .score-box {
+            font-size: 26px;
+            font-weight: bold;
+            margin: 15px 0;
+            color: #38bdf8;
+            background: #1e293b;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+        .tap-btn {
+            background-color: #10b981;
+            color: white;
+            border: none;
+            width: 130px;
+            height: 130px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+            margin: 15px 0;
+            transition: transform 0.1s;
+        }
+        .tap-btn:active {
+            transform: scale(0.92);
+        }
+        .action-btn {
             background-color: #0ea5e9;
             color: white;
             border: none;
-            padding: 15px 25px;
-            font-size: 16px;
+            padding: 12px 15px;
+            font-size: 14px;
             font-weight: bold;
-            border-radius: 12px;
+            border-radius: 10px;
             cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-            margin-top: 20px;
             width: 100%;
-            max-width: 300px;
+            margin: 8px 0;
+            box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
         }
-        .btn:active {
+        .withdraw-btn {
+            background-color: #f59e0b;
+        }
+        .ref-btn {
+            background-color: #8b5cf6;
+        }
+        .action-btn:active {
             transform: scale(0.98);
+        }
+        #status-text {
+            margin-top: 15px;
+            font-size: 13px;
+            color: #94a3b8;
         }
     </style>
 </head>
@@ -46,50 +85,86 @@
 
     <div class="container">
         <h2>Fiidaaka Tapha Mini App</h2>
-        <p id="status-text">Adsgram SDK eegaa jira...</p>
         
-        <!-- Button Beeksisa itti agarsiisan -->
-        <button class="btn" onclick="showAd()">Beeksisa Ilaali & Badhaasa Fudh</button>
+        <!-- 1. BAKKA QABXII (POINT) ITTI ILAALAN -->
+        <div class="score-box">Qabxii: <span id="score">0</span></div>
+        
+        <!-- 2. BAKKA ITTI TAPHATAN (TAP TO EARN) -->
+        <button class="tap-btn" onclick="tapScore()">TAPHI! (+1)</button>
+        
+        <!-- 3. BEEKSISA ILAALEE QABXII ITTI GUUTAN -->
+        <button class="action-btn" onclick="showAd()">Beeksisa Ilaali (+50)</button>
+        
+        <!-- 4. NAMA AFEERUU (REFERRAL) -->
+        <button class="action-btn ref-btn" onclick="shareRef()">Nama Afeeri (+100)</button>
+
+        <!-- 5. WITHDRAW GOCHUU -->
+        <button class="action-btn withdraw-btn" onclick="withdrawPoints()">Withdraw (Baasuuf)</button>
+        
+        <p id="status-text">Qophaa'aa Jira...</p>
     </div>
 
     <script>
+        let score = 0;
         let adController = null;
 
-        // 2. Adsgram qindeessuu (UnitID kee 44598 asitti galcheera)
-        function initAdsgram() {
+        // Taphachuun Qabxii Dabaluu
+        function tapScore() {
+            score += 1;
+            document.getElementById("score").innerText = score;
+        }
+
+        // Adsgram Qindeessuu
+        try {
+            if (window.Adsgram) {
+                adController = window.Adsgram.init({ blockId: "44598" });
+                document.getElementById("status-text").innerText = "Taphachuuf qophoofteetta!";
+            }
+        } catch (e) {
+            console.log("Error:", e);
+        }
+
+        // Beeksisa Ilaaluun Qabxii Argachuu
+        async function showAd() {
+            if (!adController) {
+                alert("Adsgram ammallee hin fe'amne!");
+                return;
+            }
+
             try {
-                if (window.Adsgram) {
-                    adController = window.Adsgram.init({ blockId: "44598" }); 
-                    document.getElementById("status-text").innerText = "Adsgram SDK qophaa'eera!";
-                } else {
-                    document.getElementById("status-text").innerText = "Adsgram SDK argamuu hin dandeenye.";
-                }
-            } catch (e) {
-                console.log("Adsgram init error:", e);
-                document.getElementById("status-text").innerText = "Adsgram fe'uu irratti dogoggorri uumame.";
+                document.getElementById("status-text").innerText = "Beeksisi dhihaachaa jira...";
+                const result = await adController.show();
+                
+                score += 50;
+                document.getElementById("score").innerText = score;
+                document.getElementById("status-text").innerText = "Galatoomi! Beeksisa ilaaluun +50 argatteetta.";
+            } catch (err) {
+                console.log("Ad error:", err);
+                document.getElementById("status-text").innerText = "Beeksisi cufameera ykn hin argamne.";
             }
         }
 
-        // Yeroo fuulli fe'amu Adsgram akka qophaa'u waamu
-        window.addEventListener('load', () => {
-            setTimeout(initAdsgram, 1000);
-        });
+        // Nama Afeeruu (Referral Link)
+        function shareRef() {
+            const botUrl = "https://t.me/FiidaakaGame_bot"; // Bot kee asitti jijjiiruu dandeessa
+            const text = "Fiidaaka Tapha Mini App kanaan qabxii walitti qabadhu! Mee as tuqii seeni:";
+            const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(botUrl)}&text=${encodeURIComponent(text)}`;
+            
+            // Telegram Share API ykn Link banuu
+            window.open(shareUrl, '_blank');
+            
+            // Fakkeenyaaf nama yeroo afeeru qabxii dabaluuf
+            score += 100;
+            document.getElementById("score").innerText = score;
+            alert("Linkin afeerraa qoodameera! Qabxii +100 argatteetta.");
+        }
 
-        // 3. Button yeroo tuqamu beeksisa agarsiisuu
-        async function showAd() {
-            if (adController) {
-                try {
-                    document.getElementById("status-text").innerText = "Beeksisi dhihaachaa jira...";
-                    const result = await adController.show();
-                    
-                    document.getElementById("status-text").innerText = "Galatoomi! Beeksisi milkaa'inaan ilaalamteera.";
-                } catch (err) {
-                    console.log("Ad error:", err);
-                    document.getElementById("status-text").innerText = "Beeksisi hin fe'amne ykn cufameera.";
-                }
+        // Withdraw Gochuu (Maallaqa/Qabxii Baasuuf)
+        function withdrawPoints() {
+            if (score < 1000) {
+                alert("Withdraw gochuuf qabxii 1,000 qabaachuu qabda! Qabxii kee amma jiru: " + score);
             } else {
-                alert("Adsgram SDK ammallee hin fe'amne. Intarneetii kee mirkaneessi!");
-                initAdsgram();
+                alert("Gaaffiin withdraw keetii galateeffameera! Akkaataa kaffaltii TON/Crypto dhiyeenyatti siif qopheeffama.");
             }
         }
     </script>
