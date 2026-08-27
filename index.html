@@ -8,7 +8,7 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
     <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
-    <style>UQC7GtIdD6cvcldhgMbTO7dejSjDMkiTbl4EE9v2ydgu_mfs
+    <style>
         body {
             background: linear-gradient(135deg, #0f172a, #1e293b);
             color: #ffffff;
@@ -109,7 +109,7 @@
     </div>
 
     <div class="container" style="text-align: center;">
-        <div class="score-card">⭐ <span id="score">1029</span></div>
+        <div class="score-card">⭐ <span id="score">0</span></div>
         <button class="tap-circle" onclick="tapScore()">TAPHI!</button>
         <p id="status-text">Qophaa'aa Jira...</p>
     </div>
@@ -126,10 +126,11 @@
 
         // TON Connect UI Qindeessuu (MyTonWallet, Telegram Wallet fi kkf walqabsiisuuf)
         const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
-            manifestUrl: 'https://fiidaaka.github.io/tonconnect-manifest.json', // Manifest URL kee yoo jiraate galchi ykn dhiisi
+            manifestUrl: 'https://fiidaaka.github.io/tonconnect-manifest.json',
             buttonRootId: 'wallet-container'
         });
 
+        // Qabxii localStorage irraa dubbisuu (Akka bakka lamatti hin qoodamneef)
         let score = parseInt(localStorage.getItem('fiidaaka_score')) || 1029;
         document.getElementById("score").innerText = score;
 
@@ -184,14 +185,12 @@
             alert("Linkin afeerraa qoodameera! Qabxii +100 argatteetta.");
         }
 
-        // Withdraw yeroo tuqu wallet kee kan qabate fi hin qabne ilaala
         async function withdrawPoints() {
             if (score < 1000) {
                 alert("Withdraw gochuuf qabxii 1,000 qabaachuu qabda! Qabxii kee: " + score);
                 return;
             }
 
-            // Wallet connected ta'uu isaa mirkaneessuu
             const connectedWallet = tonConnectUI.wallet;
             if (!connectedWallet) {
                 alert("Mee dura gubbaa irraa 'Connect Wallet' tuqiitii wallet kee (MyTonWallet/Telegram Wallet) waliin wal-qabsiisi!");
@@ -199,7 +198,7 @@
                 return;
             }
 
-            alert("Wallet keetiin wal-qabateera! Qabxiin kee gara kaffaltii TON tii jijjiirramaara.");
+            alert("Gaaffiin withdraw keetii wallet keetiin milkaa'inaan galateeffameera!");
         }
     </script>
 </body>
