@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fiidaaka Tapha Mini App</title>
-    <!-- Telegram Web App SDK & Adsgram SDK -->
+    <!-- Telegram Web App SDK, Adsgram SDK, & TON Connect UI -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
+    <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
     <style>
         body {
             background: linear-gradient(135deg, #0f172a, #1e293b);
@@ -24,11 +25,18 @@
         .header {
             text-align: center;
             margin-top: 5px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         .header h1 {
-            font-size: 20px;
+            font-size: 18px;
             margin: 0;
             color: #38bdf8;
+        }
+        #wallet-container {
+            margin-bottom: 5px;
         }
         .score-card {
             background: rgba(30, 41, 59, 0.7);
@@ -95,13 +103,15 @@
 <body>
 
     <div class="header">
-        <h1>Fiidaaka Tapha Mini App</h1>
-        <p id="status-text">Qophaa'aa Jira...</p>
+        <h1>Fiidaaka App</h1>
+        <!-- Bakka Button Wallet (TON Connect) Itti Muldhatu -->
+        <div id="wallet-container"></div>
     </div>
 
     <div class="container" style="text-align: center;">
-        <div class="score-card">⭐ <span id="score">0</span></div>
+        <div class="score-card">⭐ <span id="score">1029</span></div>
         <button class="tap-circle" onclick="tapScore()">TAPHI!</button>
+        <p id="status-text">Qophaa'aa Jira...</p>
     </div>
 
     <div class="menu-container">
@@ -114,14 +124,19 @@
         let tg = window.Telegram.WebApp;
         tg.expand();
 
-        // Qabxii localStorage irraa dubbisuu (Akka bakka lamatti hin qoodamneef)
-        let score = parseInt(localStorage.getItem('fiidaaka_score')) || 0;
+        // TON Connect UI Qindeessuu (MyTonWallet, Telegram Wallet fi kkf walqabsiisuuf)
+        const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
+            manifestUrl: 'https://fiidaaka.github.io/tonconnect-manifest.json', // Manifest URL kee yoo jiraate galchi ykn dhiisi
+            buttonRootId: 'wallet-container'
+        });
+
+        let score = parseInt(localStorage.getItem('fiidaaka_score')) || 1029;
         document.getElementById("score").innerText = score;
 
         function updateScore(amount) {
             score += amount;
             document.getElementById("score").innerText = score;
-            localStorage.setItem('fiidaaka_score', score); // Qabxii qusachuu
+            localStorage.setItem('fiidaaka_score', score);
         }
 
         let adController = null;
@@ -169,12 +184,22 @@
             alert("Linkin afeerraa qoodameera! Qabxii +100 argatteetta.");
         }
 
-        function withdrawPoints() {
+        // Withdraw yeroo tuqu wallet kee kan qabate fi hin qabne ilaala
+        async function withdrawPoints() {
             if (score < 1000) {
-                alert("Withdraw gochuuf qabxii 1,000 qabaachuu qabda! Qabxii kee amma jiru: " + score);
-            } else {
-                alert("Gaaffiin withdraw keetii galateeffameera!");
+                alert("Withdraw gochuuf qabxii 1,000 qabaachuu qabda! Qabxii kee: " + score);
+                return;
             }
+
+            // Wallet connected ta'uu isaa mirkaneessuu
+            const connectedWallet = tonConnectUI.wallet;
+            if (!connectedWallet) {
+                alert("Mee dura gubbaa irraa 'Connect Wallet' tuqiitii wallet kee (MyTonWallet/Telegram Wallet) waliin wal-qabsiisi!");
+                tonConnectUI.openModal();
+                return;
+            }
+
+            alert("Wallet keetiin wal-qabateera! Qabxiin kee gara kaffaltii TON tii jijjiirramaara.");
         }
     </script>
 </body>
