@@ -19,47 +19,47 @@
             justify-content: space-between;
             height: 100vh;
             margin: 0;
-            padding: 15px;
+            padding: 10px;
             box-sizing: border-box;
         }
         .header {
-            text-align: center;
-            margin-top: 5px;
             width: 100%;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 0 5px;
         }
         .header h1 {
-            font-size: 18px;
+            font-size: 16px;
             margin: 0;
             color: #38bdf8;
         }
         #wallet-container {
-            margin-bottom: 5px;
+            transform: scale(0.85);
+            transform-origin: right center;
         }
         .score-card {
             background: rgba(30, 41, 59, 0.7);
             border: 1px solid #334155;
-            padding: 10px 20px;
-            border-radius: 14px;
-            font-size: 24px;
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-size: 22px;
             font-weight: bold;
             color: #fbbf24;
-            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
-            margin: 10px 0;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            margin: 5px 0;
         }
         .tap-circle {
             background: linear-gradient(145deg, #10b981, #059669);
             color: white;
             border: none;
-            width: 120px;
-            height: 120px;
-            font-size: 18px;
+            width: 110px;
+            height: 110px;
+            font-size: 16px;
             font-weight: bold;
             border-radius: 50%;
             cursor: pointer;
-            box-shadow: 0 8px 16px rgba(16, 185, 129, 0.4);
+            box-shadow: 0 6px 14px rgba(16, 185, 129, 0.4);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -73,15 +73,15 @@
             max-width: 320px;
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            margin-bottom: 10px;
+            gap: 6px;
+            margin-bottom: 5px;
         }
         .btn {
             background-color: #0ea5e9;
             color: white;
             border: none;
-            padding: 11px;
-            font-size: 14px;
+            padding: 10px;
+            font-size: 13px;
             font-weight: bold;
             border-radius: 10px;
             cursor: pointer;
@@ -94,9 +94,9 @@
             transform: scale(0.98);
         }
         #status-text {
-            font-size: 12px;
+            font-size: 11px;
             color: #94a3b8;
-            height: 15px;
+            height: 12px;
         }
     </style>
 </head>
@@ -104,12 +104,12 @@
 
     <div class="header">
         <h1>Fiidaaka App</h1>
-        <!-- Bakka Button Wallet (TON Connect) Itti Muldhatu -->
+        <!-- Bakka Button Wallet Itti Muldhatu -->
         <div id="wallet-container"></div>
     </div>
 
     <div class="container" style="text-align: center;">
-        <div class="score-card">⭐ <span id="score">0</span></div>
+        <div class="score-card">⭐ <span id="score">1031</span></div>
         <button class="tap-circle" onclick="tapScore()">TAPHI!</button>
         <p id="status-text">Qophaa'aa Jira...</p>
     </div>
@@ -124,14 +124,13 @@
         let tg = window.Telegram.WebApp;
         tg.expand();
 
-        // TON Connect UI Qindeessuu (MyTonWallet, Telegram Wallet fi kkf walqabsiisuuf)
+        // TON Connect UI Qindeessuu
         const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
             manifestUrl: 'https://fiidaaka.github.io/tonconnect-manifest.json',
             buttonRootId: 'wallet-container'
         });
 
-        // Qabxii localStorage irraa dubbisuu (Akka bakka lamatti hin qoodamneef)
-        let score = parseInt(localStorage.getItem('fiidaaka_score')) || 1029;
+        let score = parseInt(localStorage.getItem('fiidaaka_score')) || 1031;
         document.getElementById("score").innerText = score;
 
         function updateScore(amount) {
@@ -193,7 +192,7 @@
 
             const connectedWallet = tonConnectUI.wallet;
             if (!connectedWallet) {
-                alert("Mee dura gubbaa irraa 'Connect Wallet' tuqiitii wallet kee (MyTonWallet/Telegram Wallet) waliin wal-qabsiisi!");
+                alert("Mee dura gubbaa irraa 'Connect Wallet' tuqiitii wallet kee waliin wal-qabsiisi!");
                 tonConnectUI.openModal();
                 return;
             }
@@ -203,3 +202,4 @@
     </script>
 </body>
 </html>
+ 
